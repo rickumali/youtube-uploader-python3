@@ -143,8 +143,8 @@ def resumable_upload(insert_request):
                                                              e.content)
       else:
         raise
-    except RETRIABLE_EXCEPTIONS, e:
-      error = "A retriable error occurred: %s" % e
+    except Exception as e:
+      error = "An exception error occurred: %s" % e
 
     if error is not None:
       print error
