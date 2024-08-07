@@ -4,7 +4,7 @@ This code is based on the example code on Google's documentation at:
 
 https://developers.google.com/youtube/v3/guides/uploading_a_video
 
-When I tried to make that `upload_video.py` work (early August 2024), I found that it written for Python 2. Further, it used some Python 2 techniques and referenced older libraries.
+When I tried to make that `upload_video.py` work (early August 2024), I found that it was written for Python 2. Further, and it used some Python 2 techniques and referenced older libraries.
 
 This code is a conversion that now runs on Python 3 with a requirements.txt file that brings in the right libraries.
 
@@ -22,7 +22,9 @@ upload_video.py: error: the following arguments are required: --file
 
 ## Caveats
 
-This project is probably not enough to get started, as you must follow steps (per code comments) to create a Google project (on [their console](https://console.cloud.google.com)), and then configure OAuth 2.0. Follow the links and read the code comments for learning those important steps.
+This project is probably not enough to get started, as you must follow steps (per code comments) to create a Google project (on [their console](https://console.cloud.google.com)), and then configure OAuth 2.0. Follow the links and read the code comments to learn these important steps.
+
+This project also uses [googleapis/oauth2client](https://github.com/googleapis/oauth2client) which is archived and deprecated. (But somehow still works.)
 
 ## Author
 
