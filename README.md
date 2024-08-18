@@ -4,9 +4,9 @@ This code is based on the example code on Google's documentation at:
 
 https://developers.google.com/youtube/v3/guides/uploading_a_video
 
-When I tried to make that `upload_video.py` work (early August 2024), I found that it was written for Python 2. Further, and it used some Python 2 techniques and referenced older libraries.
+When I tried to make that `upload_video.py` work (early August 2024), I found that it was written for Python 2. Further, it used some Python 2 techniques and referenced older libraries.
 
-This code is a conversion that now runs on Python 3 with a requirements.txt file that brings in the right libraries.
+This code now runs on Python 3 with a requirements.txt file that brings in the right libraries.
 
 ```
 $ python upload_video.py --help
