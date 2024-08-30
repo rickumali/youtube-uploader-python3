@@ -66,6 +66,8 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
 VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
 
+def make_newline_string_from_file(file):
+  return "This reads %s\nThen converts its contents to a string with embedded newlines\nThe newlines are in the form of backslash-n\n\nThe newlines can be repeated" % file
 
 def get_authenticated_service(args):
   flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
@@ -83,13 +85,20 @@ def get_authenticated_service(args):
 
 def initialize_upload(youtube, options):
   tags = None
+  description = None
+
   if options.keywords:
     tags = options.keywords.split(",")
+
+  if options.description_file:
+    description = make_newline_string_from_file(options.description_file)
+  else:
+    description = options.description
 
   body=dict(
     snippet=dict(
       title=options.title,
-      description=options.description,
+      description=description,
       tags=tags,
       categoryId=options.category
     ),
