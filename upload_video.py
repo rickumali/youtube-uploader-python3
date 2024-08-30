@@ -67,7 +67,8 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
 
 def make_newline_string_from_file(file):
-  return "This reads %s\nThen converts its contents to a string with embedded newlines\nThe newlines are in the form of backslash-n\n\nThe newlines can be repeated" % file
+  with open(file, "r") as f:
+    return f.read()
 
 def get_authenticated_service(args):
   flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
