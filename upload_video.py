@@ -67,6 +67,9 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
 VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
 
+def convert_to_actual_newlines(input_string):
+    return '\n'.join(input_string.split("\\n"))
+
 def make_newline_string_from_file(file):
   with open(file, "r") as f:
     return f.read()
@@ -110,7 +113,8 @@ def initialize_upload(youtube, options):
   )
 
   if options.debug_body:
-    print(json.dumps(body, indent=2))
+    print(convert_to_actual_newlines(json.dumps(body, indent=2)))
+    print("NOTE: Newlines in JSON strings have been replaced by actual newlines.")
     sys.exit(0)
 
   # Call the API's videos.insert method to create and upload the video.
