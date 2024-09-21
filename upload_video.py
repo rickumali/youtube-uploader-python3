@@ -5,6 +5,7 @@ import os
 import random
 import sys
 import time
+import json
 
 from apiclient.discovery import build
 from apiclient.errors import HttpError
@@ -108,6 +109,10 @@ def initialize_upload(youtube, options):
     )
   )
 
+  if options.debug_body:
+    print(json.dumps(body, indent=2))
+    sys.exit(0)
+
   # Call the API's videos.insert method to create and upload the video.
   insert_request = youtube.videos().insert(
     part=",".join(body.keys()),
@@ -178,6 +183,7 @@ if __name__ == '__main__':
     default="")
   argparser.add_argument("--privacyStatus", choices=VALID_PRIVACY_STATUSES,
     default=VALID_PRIVACY_STATUSES[0], help="Video privacy status.")
+  argparser.add_argument("--debug_body", action='store_true', help="Prints body sent to API call then exits")
   args = argparser.parse_args()
 
   if not os.path.exists(args.file):
