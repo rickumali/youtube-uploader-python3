@@ -93,7 +93,7 @@ def initialize_upload(youtube, options):
   description = None
 
   if options.keywords:
-    tags = options.keywords.split(",")
+    tags = [t.strip() for t in options.keywords.split(",")]
 
   if options.description_file:
     description = make_newline_string_from_file(options.description_file)
