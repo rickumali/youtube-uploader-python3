@@ -166,9 +166,10 @@ def resumable_upload(insert_request):
 if __name__ == '__main__':
   argparser.add_argument("--file", required=True, help="Video file to upload")
   argparser.add_argument("--title", help="Video title", default="Test Title")
-  argparser.add_argument("--description", help="Video description",
+  description_group = argparser.add_mutually_exclusive_group(required=True)
+  description_group.add_argument("--description", help="Video description",
     default="Test Description")
-  argparser.add_argument("--description_file", help="File name containing video description",
+  description_group.add_argument("--description_file", help="File name containing video description",
     default=None)
   argparser.add_argument("--category", default="22",
     help="Numeric video category. " +
