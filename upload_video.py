@@ -5,6 +5,7 @@ import os
 import random
 import sys
 import time
+import json
 
 from apiclient.discovery import build
 from apiclient.errors import HttpError
@@ -66,6 +67,12 @@ https://developers.google.com/api-client-library/python/guide/aaa_client_secrets
 
 VALID_PRIVACY_STATUSES = ("public", "private", "unlisted")
 
+def convert_to_actual_newlines(input_string):
+    return '\n'.join(input_string.split("\\n"))
+
+def make_newline_string_from_file(file):
+  with open(file, "r") as f:
+    return f.read()
 
 def get_authenticated_service(args):
   flow = flow_from_clientsecrets(CLIENT_SECRETS_FILE,
@@ -83,13 +90,20 @@ def get_authenticated_service(args):
 
 def initialize_upload(youtube, options):
   tags = None
+  description = None
+
   if options.keywords:
-    tags = options.keywords.split(",")
+    tags = [t.strip() for t in options.keywords.split(",")]
+
+  if options.description_file:
+    description = make_newline_string_from_file(options.description_file)
+  else:
+    description = options.description
 
   body=dict(
     snippet=dict(
       title=options.title,
-      description=options.description,
+      description=description,
       tags=tags,
       categoryId=options.category
     ),
@@ -97,6 +111,11 @@ def initialize_upload(youtube, options):
       privacyStatus=options.privacyStatus
     )
   )
+
+  if options.debug_body:
+    print(convert_to_actual_newlines(json.dumps(body, indent=2)))
+    print("NOTE: Newlines in JSON strings have been replaced by actual newlines.")
+    sys.exit(0)
 
   # Call the API's videos.insert method to create and upload the video.
   insert_request = youtube.videos().insert(
@@ -141,6 +160,7 @@ def resumable_upload(insert_request):
         raise
     except Exception as e:
       error = "An exception error occurred: %s" % e
+      sys.exit(1)
 
     if error is not None:
       print(error)
@@ -156,8 +176,11 @@ def resumable_upload(insert_request):
 if __name__ == '__main__':
   argparser.add_argument("--file", required=True, help="Video file to upload")
   argparser.add_argument("--title", help="Video title", default="Test Title")
-  argparser.add_argument("--description", help="Video description",
+  description_group = argparser.add_mutually_exclusive_group(required=True)
+  description_group.add_argument("--description", help="Video description",
     default="Test Description")
+  description_group.add_argument("--description_file", help="File name containing video description",
+    default=None)
   argparser.add_argument("--category", default="22",
     help="Numeric video category. " +
       "See https://developers.google.com/youtube/v3/docs/videoCategories/list")
@@ -165,6 +188,7 @@ if __name__ == '__main__':
     default="")
   argparser.add_argument("--privacyStatus", choices=VALID_PRIVACY_STATUSES,
     default=VALID_PRIVACY_STATUSES[0], help="Video privacy status.")
+  argparser.add_argument("--debug_body", action='store_true', help="Prints body sent to API call then exits")
   args = argparser.parse_args()
 
   if not os.path.exists(args.file):
