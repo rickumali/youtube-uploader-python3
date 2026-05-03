@@ -159,7 +159,7 @@ def resumable_upload(insert_request):
       else:
         raise
     except Exception as e:
-      error = "An exception error occurred: %s" % e
+      print("An exception error occurred: %s" % e)
       sys.exit(1)
 
     if error is not None:
